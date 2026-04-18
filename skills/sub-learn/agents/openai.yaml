@@ -1,6 +1,6 @@
 interface:
   display_name: "Subtitle Learning Notes"
   short_description: "Turn SRT files into study notes"
-  default_prompt: "Use $sub-learn to convert an SRT subtitle file into dialogue and expression study notes."
+  default_prompt: "Use $sub-learn to convert an SRT subtitle file into dialogue and Korean-friendly expression study notes."
 policy:
   allow_implicit_invocation: true

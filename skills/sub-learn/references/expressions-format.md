@@ -16,15 +16,17 @@ tags:
 
 # {Title} - Expressions
 
-> Themes: {one-sentence distillation of the episode's thematic focus}.
+> Themes: {one-sentence distillation of the episode's thematic focus}.  
+> 한국어 포인트: {for --lang=ko, one Korean sentence explaining why the expressions are useful for Korean learners}.
 
 ## Expressions
 
 ### 1. "{expression}"
 
-- **Meaning**: {translation or paraphrase}
+- **Meaning**: {translation or paraphrase. For --lang=ko, natural Korean first; add a short English gloss only when useful.}
 - **Context**: {speaker}: "{exact quote from dialogue}"
-- **Usage**: {when/how to use, with 1-2 additional example sentences in italics}
+- **Nuance**: {for --lang=ko, explain register, tone, and common Korean-speaker pitfalls in Korean. Omit if not useful.}
+- **Usage**: {when/how to use, with 1-2 additional English example sentences in italics}
 - **Similar**: {2-3 related expressions}
 
 ### 2. "{expression}"
@@ -39,7 +41,7 @@ tags:
 
 ## Grammar Notes
 
-- **"{pattern}"** - {explanation}. _"{example}"_
+- **"{pattern}"** - {explanation}. For --lang=ko, include a short Korean explanation after the English pattern. _"{example}"_
 ...
 
 ## Questions
@@ -74,9 +76,10 @@ Examples:
 ```markdown
 ### N. "{expression}"
 
-- **Meaning**: {target-language meaning, or English paraphrase if --lang=none}
+- **Meaning**: {target-language meaning, or English paraphrase if --lang=none. For --lang=ko, use natural Korean first.}
 - **Context**: {Speaker}: "{exact dialogue quote}"
-- **Usage**: {One paragraph explaining when/how to use, with 1-2 fresh example sentences in _italics_ that are NOT from the episode. Optionally flag with **{test}-level gold** if --test is set and the expression merits it.}
+- **Nuance**: {for --lang=ko, 1-2 Korean sentences explaining tone/register and why a literal Korean translation may be awkward. Omit if not useful.}
+- **Usage**: {One paragraph explaining when/how to use, with 1-2 fresh English example sentences in _italics_ that are NOT from the episode. Optionally flag with **{test}-level gold** if --test is set and the expression merits it.}
 - **Similar**: {2-3 comma-separated related expressions or synonyms}
 ```
 
@@ -113,7 +116,7 @@ Skip: proper nouns, in-universe jargon, function words.
 Observed grammar patterns, not a grammar textbook. Each entry:
 
 ```markdown
-- **"{pattern template}"** - {one-sentence explanation}. _"{fresh example sentence}"_ {optional: test gold tag}
+- **"{pattern template}"** - {one-sentence explanation}. For --lang=ko, add a short Korean explanation of why the pattern feels different from Korean. _"{fresh example sentence}"_ {optional: test gold tag}
 ```
 
 Good candidates:
@@ -140,19 +143,25 @@ Template:
 
 ## Language and test conventions
 
-### --lang=none (default)
+### --lang=ko (default)
+
+- `**Meaning**` field: natural Korean first, concise English gloss optional
+- Add `**Nuance**` when Korean speakers may misread tone, register, collocation, or literal meaning
+- `Vocabulary` table "Meaning" column: Korean meaning
+- `Usage` paragraph: English explanation plus English example sentences; add Korean clarification only when it prevents confusion
+- Grammar notes: English pattern plus a short Korean explanation
+- Questions: stay in English for output practice; add a short Korean hint if needed
+
+### --lang=none
 
 - All meanings in English
 - Explanations in English
 - No target-language text anywhere
+- Omit the Korean theme line and `Nuance` bullets unless they are useful in English
 
-### --lang=ko / ja / es / zh / etc
+### --lang=ja / es / zh / etc
 
-- `**Meaning**` field: target-language translation first, English gloss optional
-- `Vocabulary` table "Meaning" column: target-language only
-- `Usage` paragraph: stays in English (learners are learning English)
-- Grammar notes: stays in English (grammar terminology is English)
-- Questions: stays in English (output practice)
+- Follow the same structure as `ko`, but use the requested target language for meanings and learner-facing explanations
 
 ### --test={id}
 
@@ -167,8 +176,9 @@ Before writing:
 1. **Every expression has a direct quote**. No paraphrased contexts.
 2. **No fabricated examples**. The "Context" must be exact from the dialogue file.
 3. **Usage examples** (in italics) are genuine English, not awkward literal constructions.
-4. **Meaning translations** (if `--lang` set) are natural in the target language, not word-for-word calques.
-5. **Gold tags** are honest signals, not decorative.
+4. **Meaning translations** are natural in the target language, not word-for-word calques. For Korean, avoid awkward dictionary Korean.
+5. **Korean explanations** help comprehension without replacing English practice.
+6. **Gold tags** are honest signals, not decorative.
 
 ## What NOT to include
 

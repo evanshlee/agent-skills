@@ -3,22 +3,20 @@
 Turn an SRT subtitle file into two companion markdown notes for language learning:
 
 1. `{basename}-dialogue.md`: cleaned, human-readable dialogue with speaker tags
-2. `{basename}-expressions.md`: curated expressions, vocabulary, grammar notes, and writing prompts
+2. `{basename}-expressions.md`: curated expressions, vocabulary, grammar notes, Korean-friendly explanations, and writing prompts
 
 ## Usage
 
+This is an agent skill, not a shell command. Paste one of these prompts into Codex or Claude instead of running `sub-learn` in a terminal.
+
 ```text
-sub-learn <srt-path> [--lang <code>] [--test <celpip|ielts|toefl|none>] [--output <dir>]
+Use $sub-learn with ~/Downloads/episode.srt
+Use $sub-learn with ~/Downloads/episode.srt --lang ko
+Use $sub-learn with ~/Downloads/episode.srt --lang ja --test celpip
+Use $sub-learn with C:/subs/E01.srt --output ~/notes/ --lang es --test ielts
 ```
 
-## Examples
-
-```bash
-sub-learn ~/Downloads/episode.srt
-sub-learn ~/Downloads/episode.srt --lang ko
-sub-learn ~/Downloads/episode.srt --lang ja --test celpip
-sub-learn "C:/subs/E01.srt" --output ~/notes/ --lang es --test ielts
-```
+Default explanation language is Korean (`--lang ko`). Use `--lang none` for English-only notes.
 
 ## Install with Codex
 

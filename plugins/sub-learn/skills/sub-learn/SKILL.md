@@ -1,6 +1,6 @@
 ---
 name: sub-learn
-description: 'Convert a subtitle file (SRT) into structured English-learning notes: a cleaned dialogue transcript plus an expressions/vocabulary/grammar companion. Use when the user provides a subtitle path and asks for "same treatment", "study notes", "learning notes", "dialogue + expressions", or invokes /sub-learn.'
+description: 'Convert a subtitle file (SRT) into structured language-learning notes: a cleaned dialogue transcript plus an expressions/vocabulary/grammar companion. Defaults to Korean learner-friendly explanations when no --lang is supplied. Use when the user provides a subtitle path and asks for "same treatment", "study notes", "learning notes", "dialogue + expressions", or invokes /sub-learn.'
 ---
 
 # sub-learn
@@ -8,9 +8,11 @@ description: 'Convert a subtitle file (SRT) into structured English-learning not
 Turn a subtitle file into two companion markdown notes:
 
 1. **`{basename}-dialogue.md`** - cleaned, human-readable dialogue with speaker tags
-2. **`{basename}-expressions.md`** - curated expressions, vocabulary, grammar notes, and writing prompts
+2. **`{basename}-expressions.md`** - curated expressions, vocabulary, grammar notes, Korean-friendly explanations, and writing prompts
 
 No vault structure assumptions. No external files touched beyond the two outputs.
+
+**Important:** This is an agent skill, not a shell command or installed CLI. Do not run `sub-learn` in Bash, zsh, or PowerShell. Treat `sub-learn <path>` examples as prompts/arguments for the agent to process.
 
 ## Purpose
 
@@ -32,18 +34,22 @@ Do **not** invoke for: general subtitle cleaning (no learning aid), translation-
 | Argument | Required | Default | Purpose |
 |---|---|---|---|
 | `<srt-path>` | Yes | - | Absolute or relative path to the SRT file |
-| `--lang <code>` | No | `none` | ISO 639-1 code for translation language (e.g., `ko`, `ja`, `es`, `zh`). If `none`, meanings stay in English only. |
+| `--lang <code>` | No | `ko` | ISO 639-1 code for explanation language (e.g., `ko`, `ja`, `es`, `zh`). Default is `ko` because the primary audience is Korean English learners. Use `--lang none` for English-only notes. |
 | `--test <id>` | No | `none` | Target English test for annotations. Accepts `celpip`, `ielts`, `toefl`, `none`. When set, mark relevant expressions with gold-standard tags (e.g., "**CELPIP Writing gold**"). |
 | `--output <dir>` | No | Same folder as SRT | Directory where both output files are written |
 
-### Examples
+### Invocation examples
 
+These are prompts for the agent, not terminal commands:
+
+```text
+Use $sub-learn with ~/Downloads/episode.srt
+Use $sub-learn with ~/Downloads/episode.srt --lang ko
+Use $sub-learn with ~/Downloads/episode.srt --lang ja --test celpip
+Use $sub-learn with C:/subs/E01.srt --output ~/notes/ --lang es --test ielts
 ```
-sub-learn ~/Downloads/episode.srt
-sub-learn ~/Downloads/episode.srt --lang ko
-sub-learn ~/Downloads/episode.srt --lang ja --test celpip
-sub-learn "C:\subs\E01.srt" --output ~/notes/ --lang es --test ielts
-```
+
+If a user types `sub-learn ~/Downloads/episode.srt`, interpret it as an invocation request and process the file. Do not execute `sub-learn` in a shell.
 
 ## Workflow
 
@@ -61,8 +67,9 @@ Extract:
 
 ### Step 3 - Resolve output directory
 
-1. If `--output <dir>` given, use it (create if missing via `mkdir -p`).
+1. If `--output <dir>` is given, use it. Create the directory only if your agent environment provides a safe file/directory creation capability.
 2. Else, use the directory of the input SRT.
+3. Avoid shelling out unless necessary. If shell access fails with `command not found`, `permission denied`, or `missing file/path`, stop retrying the same command and switch to the agent's normal file tools or ask the user to verify the path.
 
 ### Step 4 - Build dialogue file
 
@@ -85,7 +92,7 @@ Follow `references/expressions-format.md`. Core sections (in order):
 5. **Grammar Notes** (~5-8 bullets)
 6. **Questions** (3 writing prompts tying 2-3 expressions each)
 
-If `--lang` is set, provide meanings in that language. If `--test` is set, tag standout entries with gold labels. Do not fabricate - only mark entries that genuinely fit the test's scoring criteria.
+If `--lang` is omitted, use `ko`. If `--lang` is set, provide learner-facing explanations in that language. If `--test` is set, tag standout entries with gold labels. Do not fabricate - only mark entries that genuinely fit the test's scoring criteria.
 
 ### Step 6 - Write both files
 
@@ -115,6 +122,17 @@ tags:
 ```
 
 No series-specific tags. No vault-specific tags. Users can add their own after generation.
+
+## Korean learner defaults
+
+When `--lang ko` is active, including by default:
+
+- Keep the dialogue file in the original subtitle language. Do not translate the full dialogue.
+- In the expressions file, write `Meaning` in natural Korean first, with a concise English gloss only when useful.
+- Add Korean nuance explanations where they help Korean speakers avoid literal translation mistakes.
+- Keep English example sentences in English, because the output is for English practice.
+- Keep writing questions in English, but add a short Korean hint if the task would otherwise be unclear.
+- Prefer practical explanations over textbook grammar labels. When a grammar term appears, explain it briefly in Korean.
 
 ## Side effects
 
