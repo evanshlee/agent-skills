@@ -1,76 +1,148 @@
 # agent-skills
 
-Provider-independent agent skills collection. Works with any LLM coding agent that can read markdown and frontmatter: Claude Code, Codex CLI, Cursor, Gemini CLI, Aider, and others.
+Reusable Agent Skills by Evan Lee. The repository is designed to be friendly for both Codex users and Claude users while staying close to the portable Agent Skills convention: each skill is a folder with a `SKILL.md` entry point and optional `references/`, `scripts/`, or `assets/` resources.
 
-## Why provider-independent?
+## Skills
 
-Skills here are plain markdown with YAML frontmatter. They describe **intent** ("read the file", "search for the pattern") rather than vendor-specific tool names (`Read`, `Grep`), so any capable agent can map them to its own toolset.
+| Skill | What it does | Codex install prompt |
+| --- | --- | --- |
+| `hello-world` | Minimal sanity check that confirms a skill can load. | `https://github.com/evanshlee/agent-skills/tree/main/skills/hello-world` |
+| `sub-learn` | Converts an SRT subtitle file into cleaned dialogue plus English-learning expressions, vocabulary, grammar notes, and prompts. | `https://github.com/evanshlee/agent-skills/tree/main/skills/sub-learn` |
 
-## Structure
+## Repository layout
 
-```
+```text
 agent-skills/
-├── AGENTS.md                          # cross-vendor repo guide
-├── .claude-plugin/
-│   └── marketplace.json               # Claude Code plugin marketplace manifest
-└── plugins/
-    └── <plugin-name>/
-        ├── .claude-plugin/plugin.json # Claude Code plugin manifest
-        ├── README.md
-        └── skills/
-            └── <skill-name>/
-                └── SKILL.md           # frontmatter + skill body
+|-- README.md
+|-- AGENTS.md
+|-- skills/                         # Canonical skill folders for Codex and other skill loaders
+|   |-- hello-world/
+|   |   |-- SKILL.md
+|   |   `-- agents/openai.yaml
+|   `-- sub-learn/
+|       |-- SKILL.md
+|       |-- agents/openai.yaml
+|       `-- references/
+|-- plugins/                        # Claude Code plugin packages
+|   |-- hello-world/
+|   |   |-- .claude-plugin/plugin.json
+|   |   `-- skills/hello-world/
+|   `-- sub-learn/
+|       |-- .claude-plugin/plugin.json
+|       `-- skills/sub-learn/
+|-- .claude-plugin/
+|   `-- marketplace.json            # Claude Code marketplace manifest
+`-- scripts/
+    `-- sync-claude-plugins.py      # Copies canonical skills into Claude plugin packages
 ```
 
-Each subdirectory under `plugins/` is an independently installable unit.
+`skills/` is the canonical source of truth. The copies under `plugins/*/skills/` exist so Claude Code users can install the same skills through the Claude plugin marketplace.
 
-## Install (Claude Code)
+## Install with Codex
 
-Add this repo as a marketplace, then install individual plugins:
+The easiest path is to paste an install prompt into Codex.
+
+### Install one skill
+
+```text
+Use $skill-installer to install this Codex skill:
+https://github.com/evanshlee/agent-skills/tree/main/skills/sub-learn
+```
+
+Then restart Codex so it can discover the new skill.
+
+### Install all current skills
+
+```text
+Use $skill-installer to install these Codex skills:
+https://github.com/evanshlee/agent-skills/tree/main/skills/hello-world
+https://github.com/evanshlee/agent-skills/tree/main/skills/sub-learn
+```
+
+Then restart Codex.
+
+### Manual Codex install
+
+If the installer is unavailable, copy a skill folder into your Codex skills directory.
+
+PowerShell on Windows:
+
+```powershell
+$CodexHome = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME ".codex" }
+New-Item -ItemType Directory -Force (Join-Path $CodexHome "skills") | Out-Null
+Copy-Item -Recurse -Force ".\skills\sub-learn" (Join-Path $CodexHome "skills\sub-learn")
+```
+
+bash or zsh on macOS/Linux:
 
 ```bash
+mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills"
+cp -R ./skills/sub-learn "${CODEX_HOME:-$HOME/.codex}/skills/sub-learn"
+```
+
+Restart Codex after a manual install.
+
+## Install with Claude Code
+
+Claude Code users can install this repository as a plugin marketplace.
+
+```text
 /plugin marketplace add evanshlee/agent-skills
+/plugin install sub-learn@evanshlee/agent-skills
+```
+
+To test the marketplace setup:
+
+```text
 /plugin install hello-world@evanshlee/agent-skills
 ```
 
-## Install (Codex CLI)
+## Manual Claude skill install
 
-Codex CLI does not have a plugin marketplace; it relies on `AGENTS.md` context. Clone the repo once, then reference skills from your global or project `AGENTS.md`.
+If you prefer plain skills instead of plugins, copy a folder from `skills/` into your Claude skills directory.
+
+PowerShell on Windows:
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
+Copy-Item -Recurse -Force ".\skills\sub-learn" "$HOME\.claude\skills\sub-learn"
+```
+
+bash or zsh on macOS/Linux:
 
 ```bash
-# clone once (update later with `git pull`)
-git clone https://github.com/evanshlee/agent-skills.git ~/agent-skills
+mkdir -p "$HOME/.claude/skills"
+cp -R ./skills/sub-learn "$HOME/.claude/skills/sub-learn"
 ```
 
-**Option A — global (every Codex session):** add to `~/.codex/AGENTS.md`:
-
-```markdown
-# Personal Skills
-
-When the user's request matches one of these, read the corresponding SKILL.md and follow its instructions:
-
-- hello-world: `~/agent-skills/plugins/hello-world/skills/hello-world/SKILL.md`
-```
-
-**Option B — per project:** add the same block to the project's `AGENTS.md` so the skill is only loaded for that repo.
-
-**Option C — ad-hoc:** just tell Codex `follow ~/agent-skills/plugins/<name>/skills/<name>/SKILL.md` whenever you want it.
-
-## Install (Cursor / Gemini CLI / Aider / other agents)
-
-Any agent that can read markdown files works. Two common patterns:
-
-1. **Reference from the agent's config file** — e.g., Cursor `.cursorrules`, Gemini CLI `GEMINI.md`, Aider `.aider.conf.yml` + CONVENTIONS.md. Point it at the SKILL.md path(s) you care about.
-2. **Paste the skill body** into the agent's context at invocation time — works everywhere, no config needed.
-
-Each `SKILL.md` is self-contained and does not depend on any vendor-specific tool names.
+Restart Claude Code after a manual install.
 
 ## Authoring a new skill
 
-1. Create `plugins/<plugin-name>/` with `.claude-plugin/plugin.json` and `skills/<skill-name>/SKILL.md`
-2. Write SKILL.md with frontmatter (`name`, `description`)
-3. Keep instructions tool-agnostic — describe *what* to do, not *which* tool to call
-4. Add an entry under `plugins[]` in `.claude-plugin/marketplace.json`
+1. Create `skills/<skill-name>/SKILL.md`.
+2. Keep `SKILL.md` frontmatter minimal: `name` and `description` only.
+3. Add `agents/openai.yaml` with UI metadata for Codex-friendly skill lists.
+4. Put long supporting material in `references/` and reusable code in `scripts/`.
+5. Keep instructions tool-agnostic. Write actions like "read the file" instead of vendor tool names.
+6. Add a Claude plugin package under `plugins/<skill-name>/` with `.claude-plugin/plugin.json`.
+7. Run the sync script so the plugin copy matches the canonical skill:
+
+```bash
+python scripts/sync-claude-plugins.py
+```
+
+8. Add the plugin entry to `.claude-plugin/marketplace.json`.
+9. Update the skill table in this README.
+
+## Maintenance
+
+When you edit a skill, edit the canonical copy under `skills/` first. Then run:
+
+```bash
+python scripts/sync-claude-plugins.py
+```
+
+This keeps the Claude plugin packages in sync without making `plugins/` the source of truth.
 
 ## License
 

@@ -1,11 +1,25 @@
 # hello-world
 
-A minimal sample plugin that ships one skill (`hello-world`) to demonstrate the repo conventions.
+A minimal sample plugin that ships one skill, `hello-world`, to demonstrate the repo conventions.
 
-Use this as a starting template when authoring a new plugin:
+## Install with Codex
 
-1. Copy the directory to `plugins/<your-plugin-name>/`
-2. Update `.claude-plugin/plugin.json` (name, description)
-3. Rename `skills/hello-world/` to match your skill name
-4. Rewrite `SKILL.md` with your own frontmatter and body
-5. Register the plugin in the root `.claude-plugin/marketplace.json`
+Paste this into Codex:
+
+```text
+Use $skill-installer to install this Codex skill:
+https://github.com/evanshlee/agent-skills/tree/main/skills/hello-world
+```
+
+Restart Codex after installation.
+
+## Install with Claude Code
+
+```text
+/plugin marketplace add evanshlee/agent-skills
+/plugin install hello-world@evanshlee/agent-skills
+```
+
+## Authoring note
+
+The canonical skill lives at `skills/hello-world/`. This plugin package contains a copied version for Claude Code plugin installation.

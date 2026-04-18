@@ -1,0 +1,6 @@
+interface:
+  display_name: "Hello World"
+  short_description: "Confirm skill loading works"
+  default_prompt: "Use $hello-world to verify that the skill loader is working."
+policy:
+  allow_implicit_invocation: true
