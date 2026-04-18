@@ -12,6 +12,7 @@ This repository publishes portable Agent Skills for Codex, Claude Code, and othe
 ## Skill conventions
 
 - Every `SKILL.md` must include YAML frontmatter with `name` and `description`.
+- Quote YAML frontmatter string values when they contain `: `, quotes, or other punctuation that can change YAML parsing.
 - Keep frontmatter portable. Do not add vendor-specific fields such as `allowed-tools` to canonical skills.
 - Keep skill bodies tool-agnostic. Prefer "read the file" or "search for the pattern" over tool names like `Read`, `Grep`, or `Bash`.
 - Add `agents/openai.yaml` for Codex-friendly UI metadata when creating a new skill.

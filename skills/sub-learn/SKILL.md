@@ -1,6 +1,6 @@
 ---
 name: sub-learn
-description: Convert a subtitle file (SRT) into structured English-learning notes: a cleaned dialogue transcript plus an expressions/vocabulary/grammar companion. Use when the user provides a subtitle path and asks for "same treatment", "study notes", "learning notes", "dialogue + expressions", or invokes /sub-learn.
+description: 'Convert a subtitle file (SRT) into structured English-learning notes: a cleaned dialogue transcript plus an expressions/vocabulary/grammar companion. Use when the user provides a subtitle path and asks for "same treatment", "study notes", "learning notes", "dialogue + expressions", or invokes /sub-learn.'
 ---
 
 # sub-learn
