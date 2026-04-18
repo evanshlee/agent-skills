@@ -1,0 +1,19 @@
+{
+  "name": "sub-learn",
+  "version": "0.1.0",
+  "description": "Convert an SRT subtitle file into structured English-learning notes (cleaned dialogue + expressions/vocab/grammar companion)",
+  "author": {
+    "name": "Evan Lee",
+    "url": "https://github.com/evanshlee"
+  },
+  "license": "MIT",
+  "keywords": [
+    "language-learning",
+    "english",
+    "subtitles",
+    "srt",
+    "celpip",
+    "ielts",
+    "toefl"
+  ]
+}

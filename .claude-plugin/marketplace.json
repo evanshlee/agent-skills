@@ -13,6 +13,11 @@
       "name": "hello-world",
       "source": "./plugins/hello-world",
       "description": "Sample skill demonstrating the cross-provider SKILL.md format"
+    },
+    {
+      "name": "sub-learn",
+      "source": "./plugins/sub-learn",
+      "description": "Convert an SRT subtitle file into structured English-learning notes (dialogue + expressions/vocab/grammar)"
     }
   ]
 }
