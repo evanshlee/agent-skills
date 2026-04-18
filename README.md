@@ -33,15 +33,37 @@ Add this repo as a marketplace, then install individual plugins:
 /plugin install hello-world@evanshlee/agent-skills
 ```
 
-## Install (other agents)
+## Install (Codex CLI)
 
-Clone the repo and point your agent at the `skills/` directory inside any plugin:
+Codex CLI does not have a plugin marketplace; it relies on `AGENTS.md` context. Clone the repo once, then reference skills from your global or project `AGENTS.md`.
 
 ```bash
-git clone https://github.com/evanshlee/agent-skills.git
+# clone once (update later with `git pull`)
+git clone https://github.com/evanshlee/agent-skills.git ~/agent-skills
 ```
 
-Then configure your agent to load `plugins/<name>/skills/<skill>/SKILL.md`. Each SKILL.md is self-contained.
+**Option A — global (every Codex session):** add to `~/.codex/AGENTS.md`:
+
+```markdown
+# Personal Skills
+
+When the user's request matches one of these, read the corresponding SKILL.md and follow its instructions:
+
+- hello-world: `~/agent-skills/plugins/hello-world/skills/hello-world/SKILL.md`
+```
+
+**Option B — per project:** add the same block to the project's `AGENTS.md` so the skill is only loaded for that repo.
+
+**Option C — ad-hoc:** just tell Codex `follow ~/agent-skills/plugins/<name>/skills/<name>/SKILL.md` whenever you want it.
+
+## Install (Cursor / Gemini CLI / Aider / other agents)
+
+Any agent that can read markdown files works. Two common patterns:
+
+1. **Reference from the agent's config file** — e.g., Cursor `.cursorrules`, Gemini CLI `GEMINI.md`, Aider `.aider.conf.yml` + CONVENTIONS.md. Point it at the SKILL.md path(s) you care about.
+2. **Paste the skill body** into the agent's context at invocation time — works everywhere, no config needed.
+
+Each `SKILL.md` is self-contained and does not depend on any vendor-specific tool names.
 
 ## Authoring a new skill
 
