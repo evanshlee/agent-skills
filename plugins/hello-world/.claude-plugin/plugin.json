@@ -1,0 +1,10 @@
+{
+  "name": "hello-world",
+  "version": "0.1.0",
+  "description": "Sample skill demonstrating the cross-provider SKILL.md format",
+  "author": {
+    "name": "Evan Lee",
+    "url": "https://github.com/evanshlee"
+  },
+  "license": "MIT"
+}

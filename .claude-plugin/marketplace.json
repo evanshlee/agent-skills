@@ -1,0 +1,18 @@
+{
+  "name": "agent-skills",
+  "owner": {
+    "name": "Evan Lee",
+    "url": "https://github.com/evanshlee"
+  },
+  "metadata": {
+    "description": "Provider-independent agent skills collection",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "hello-world",
+      "source": "./plugins/hello-world",
+      "description": "Sample skill demonstrating the cross-provider SKILL.md format"
+    }
+  ]
+}
